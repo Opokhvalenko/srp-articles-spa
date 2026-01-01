@@ -1,2 +1,21 @@
-.home-page {
+.home-page__loader {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.home-page__alert {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.home-page__list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.home-page__card {
+    cursor: default;
 }
