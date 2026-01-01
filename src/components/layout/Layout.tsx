@@ -1,5 +1,5 @@
+import { AppBar, Container, Toolbar, Typography } from "@mui/material";
 import type React from "react";
-import { AppBar, Toolbar, Typography, Container } from "@mui/material";
 import "./Layout.scss";
 
 interface LayoutProps {

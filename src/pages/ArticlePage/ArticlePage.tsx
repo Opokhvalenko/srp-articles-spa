@@ -1,6 +1,6 @@
+import { Typography } from "@mui/material";
 import type React from "react";
 import { useParams } from "react-router-dom";
-import { Typography } from "@mui/material";
 import Layout from "../../components/layout/Layout";
 import "./ArticlePage.scss";
 

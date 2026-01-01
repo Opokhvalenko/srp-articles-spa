@@ -1,5 +1,5 @@
-import type React from "react";
 import { Typography } from "@mui/material";
+import type React from "react";
 import Layout from "../../components/layout/Layout";
 import "./HomePage.scss";
 
