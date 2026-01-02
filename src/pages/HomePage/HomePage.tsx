@@ -7,17 +7,24 @@ import {
 	Typography,
 } from "@mui/material";
 import type React from "react";
-import Layout from "../../components/layout/Layout";
+import { useNavigate } from "react-router-dom";
 import HighlightedText from "../../features/articles/components/HighlightedText";
 import { useArticleFilter } from "../../features/articles/hooks/useArticleFilter";
 import { useArticles } from "../../features/articles/hooks/useArticles";
+import type { Article } from "../../features/articles/types";
 import { truncateText } from "../../features/articles/utils/filterArticles";
+
 import "./HomePage.scss";
 
 const HomePage: React.FC = () => {
 	const { articles, isLoading, error } = useArticles();
+	const navigate = useNavigate();
 	const { query, setQuery, filteredArticles, keywords } =
 		useArticleFilter(articles);
+
+	const handleOpenArticle = (article: Article) => {
+		navigate(`/articles/${article.id}`, { state: { article } });
+	};
 
 	const handleQueryChange = (
 		event: React.ChangeEvent<HTMLInputElement>,
@@ -26,7 +33,7 @@ const HomePage: React.FC = () => {
 	};
 
 	return (
-		<Layout>
+		<>
 			<Typography variant="h4" component="h1" gutterBottom>
 				Articles
 			</Typography>
@@ -62,6 +69,7 @@ const HomePage: React.FC = () => {
 							key={article.id}
 							className="home-page__card"
 							variant="outlined"
+							onClick={() => handleOpenArticle(article)}
 						>
 							<CardContent>
 								<Typography variant="h6" component="h2" gutterBottom>
@@ -78,7 +86,7 @@ const HomePage: React.FC = () => {
 					))}
 				</div>
 			)}
-		</Layout>
+		</>
 	);
 };
 

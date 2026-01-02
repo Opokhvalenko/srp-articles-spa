@@ -1,2 +1,26 @@
 .article-page {
+    padding-top: 24px;
+    padding-bottom: 24px;
+
+    &__header {
+        display: flex;
+        justify-content: flex-start;
+        margin-bottom: 16px;
+    }
+
+    &__description {
+        margin-top: 16px;
+        line-height: 1.6;
+    }
+
+    &__loader {
+        display: flex;
+        justify-content: center;
+        padding: 32px 0;
+    }
+
+    &__alert {
+        margin-bottom: 16px;
+    }
 }
+
