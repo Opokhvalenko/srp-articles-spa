@@ -4,6 +4,7 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import "./styles/globals.scss";
+import { ErrorBoundary } from "./components/error/ErrorBoundary";
 
 const theme = createTheme({});
 
@@ -12,7 +13,9 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
 			<BrowserRouter>
-				<App />
+				<ErrorBoundary>
+					<App />
+				</ErrorBoundary>
 			</BrowserRouter>
 		</ThemeProvider>
 	</React.StrictMode>,
