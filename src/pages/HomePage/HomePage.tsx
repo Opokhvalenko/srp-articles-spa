@@ -6,16 +6,21 @@ import {
 	TextField,
 	Typography,
 } from "@mui/material";
-import type React from "react";
+import type { FC } from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+
 import HighlightedText from "../../features/articles/components/HighlightedText";
+import {
+	selectFilteredArticles,
+	selectKeywords,
+} from "../../features/articles/store/articlesSelectors";
 import { useArticlesStore } from "../../features/articles/store/useArticlesStore";
 import { truncateText } from "../../features/articles/utils/filterArticles";
 
 import "./HomePage.scss";
 
-const HomePage: React.FC = () => {
+const HomePage: FC = () => {
 	const navigate = useNavigate();
 
 	const isLoading = useArticlesStore((s) => s.isLoading);
@@ -24,8 +29,8 @@ const HomePage: React.FC = () => {
 	const filter = useArticlesStore((s) => s.filter);
 	const setFilter = useArticlesStore((s) => s.setFilter);
 
-	const filtered = useArticlesStore((s) => s.filtered);
-	const keywords = useArticlesStore((s) => s.keywords);
+	const filtered = useArticlesStore(selectFilteredArticles);
+	const keywords = useArticlesStore(selectKeywords);
 
 	const loadArticles = useArticlesStore((s) => s.loadArticles);
 	const selectArticle = useArticlesStore((s) => s.selectArticle);
@@ -66,6 +71,11 @@ const HomePage: React.FC = () => {
 			{error && (
 				<Alert severity="error" className="home-page__alert">
 					{error}
+				</Alert>
+			)}
+			{!isLoading && !error && filtered.length === 0 && (
+				<Alert severity="info" className="home-page__alert">
+					No articles found. Try different keywords.
 				</Alert>
 			)}
 
