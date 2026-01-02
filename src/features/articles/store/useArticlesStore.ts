@@ -1,18 +1,11 @@
 import { create } from "zustand";
 import { fetchArticles, getArticleById } from "../../../api/articlesApi";
 import type { Article } from "../types";
-import {
-	type FilteredArticle,
-	filterAndSortArticles,
-	parseKeywords,
-} from "../utils/filterArticles";
 
-interface ArticlesState {
+export interface ArticlesState {
 	//data
 	articles: Article[];
 	filter: string;
-	filtered: FilteredArticle[];
-	keywords: string[];
 
 	//list loading
 	isLoading: boolean;
@@ -24,25 +17,21 @@ interface ArticlesState {
 	selectedArticleLoading: boolean;
 	selectedArticleError: string | null;
 
+	//internal(avoid dev double-fetch)
+	hasLoaded: boolean;
+
 	//actions
-	loadArticles: () => Promise<void>;
+	loadArticles: (opts?: { force?: boolean }) => Promise<void>;
 	setFilter: (value: string) => void;
 
 	selectArticle: (id: number | null) => void;
 	loadArticleById: (id: number) => Promise<void>;
 }
 
-const recomputeFilter = (articles: Article[], filter: string) => ({
-	filtered: filterAndSortArticles(articles, filter),
-	keywords: parseKeywords(filter),
-});
-
 export const useArticlesStore = create<ArticlesState>((set, get) => ({
 	//initial
 	articles: [],
 	filter: "",
-	filtered: [],
-	keywords: [],
 
 	isLoading: false,
 	error: null,
@@ -52,18 +41,27 @@ export const useArticlesStore = create<ArticlesState>((set, get) => ({
 	selectedArticleLoading: false,
 	selectedArticleError: null,
 
+	hasLoaded: false,
+
 	//actions
-	loadArticles: async () => {
+	loadArticles: async (opts) => {
+		const { hasLoaded, isLoading } = get();
+		if (isLoading) {
+			return;
+		}
+		if (hasLoaded && !opts?.force) {
+			return;
+		}
+
 		try {
 			set({ isLoading: true, error: null });
 
 			const articles = await fetchArticles();
-			const { filter } = get();
 
 			set({
 				articles,
-				...recomputeFilter(articles, filter),
 				isLoading: false,
+				hasLoaded: true,
 			});
 		} catch (err) {
 			const message =
@@ -73,12 +71,7 @@ export const useArticlesStore = create<ArticlesState>((set, get) => ({
 	},
 
 	setFilter: (value) => {
-		const { articles } = get();
-
-		set({
-			filter: value,
-			...recomputeFilter(articles, value),
-		});
+		set({ filter: value });
 	},
 
 	selectArticle: (id) => {
@@ -99,6 +92,7 @@ export const useArticlesStore = create<ArticlesState>((set, get) => ({
 
 			const article = await getArticleById(String(id));
 
+			//protect from race conditions
 			const { selectedArticleId } = get();
 			if (selectedArticleId !== id) {
 				return;
