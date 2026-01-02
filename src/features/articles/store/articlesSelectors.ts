@@ -1,7 +1,38 @@
-import { filterAndSortArticles, parseKeywords } from "../utils/filterArticles";
+import type { Article } from "../types";
+import {
+	type FilteredArticle,
+	filterAndSortArticles,
+	parseKeywords,
+} from "../utils/filterArticles";
 import type { ArticlesState } from "./useArticlesStore";
 
-export const selectKeywords = (s: ArticlesState) => parseKeywords(s.filter);
+// keywords selector (memoized)
+let lastFilterForKeywords = "";
+let lastKeywords: string[] = [];
 
-export const selectFilteredArticles = (s: ArticlesState) =>
-	filterAndSortArticles(s.articles, s.filter);
+export const selectKeywords = (s: ArticlesState): string[] => {
+	if (s.filter === lastFilterForKeywords) {
+		return lastKeywords;
+	}
+
+	lastFilterForKeywords = s.filter;
+	lastKeywords = parseKeywords(s.filter);
+	return lastKeywords;
+};
+
+// filtered articles selector (memoized)
+let lastArticlesRef: Article[] | null = null;
+let lastFiltereForList = "";
+let lastFiltered: FilteredArticle[] = [];
+
+export const selectFilteredArticles = (s: ArticlesState): FilteredArticle[] => {
+	if (s.articles === lastArticlesRef && s.filter === lastFiltereForList) {
+		return lastFiltered;
+	}
+
+	lastArticlesRef = s.articles;
+	lastFiltereForList = s.filter;
+	lastFiltered = filterAndSortArticles(s.articles, s.filter);
+
+	return lastFiltered;
+};
