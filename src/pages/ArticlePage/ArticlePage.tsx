@@ -6,51 +6,20 @@ import {
 	Container,
 	Typography,
 } from "@mui/material";
-import React from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { getArticleById } from "../../api/articlesApi";
-import type { Article } from "../../features/articles/types";
+import type React from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useSelectedArticle } from "../../features/articles/hooks/useSelectedArticle";
 
 import "./ArticlePage.scss";
-
-interface LocationState {
-	article?: Article;
-}
 
 const ArticlePage: React.FC = () => {
 	const { id } = useParams<{ id: string }>();
 	const navigate = useNavigate();
-	const location = useLocation();
-	const state = location.state as LocationState | null;
 
-	const [article, setArticle] = React.useState<Article | null>(
-		state?.article ?? null,
+	const numericId = id ? Number(id) : null;
+	const { article, isLoading, error } = useSelectedArticle(
+		Number.isFinite(numericId) ? numericId : null,
 	);
-
-	const [isLoading, setIsLoading] = React.useState<boolean>(!state?.article);
-	const [error, setError] = React.useState<string | null>(null);
-
-	React.useEffect(() => {
-		if (article || !id) {
-			return;
-		}
-
-		const loadArticle = async () => {
-			try {
-				setIsLoading(true);
-				setError(null);
-
-				const data = await getArticleById(id);
-				setArticle(data);
-			} catch {
-				setError("Failed to load article. Please try again.");
-			} finally {
-				setIsLoading(false);
-			}
-		};
-
-		void loadArticle();
-	}, [article, id]);
 
 	const handleBack = () => {
 		navigate(-1);

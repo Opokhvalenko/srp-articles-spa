@@ -1,18 +1,20 @@
 import type React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { lazy, Suspense } from "react";
+import { Route, Routes } from "react-router-dom";
 import Layout from "../components/layout/Layout";
-import ArticlePage from "../pages/ArticlePage/ArticlePage";
-import HomePage from "../pages/HomePage/HomePage";
+
+const HomePage = lazy(() => import("../pages/HomePage/HomePage"));
+const ArticlePage = lazy(() => import("../pages/ArticlePage/ArticlePage"));
 
 const AppRouter: React.FC = () => (
-	<BrowserRouter>
-		<Layout>
+	<Layout>
+		<Suspense fallback={<div style={{ padding: 16 }}>Loading...</div>}>
 			<Routes>
 				<Route path="/" element={<HomePage />} />
-				<Route path="/article/:id" element={<ArticlePage />} />
+				<Route path="/articles/:id" element={<ArticlePage />} />
 			</Routes>
-		</Layout>
-	</BrowserRouter>
+		</Suspense>
+	</Layout>
 );
 
 export default AppRouter;
