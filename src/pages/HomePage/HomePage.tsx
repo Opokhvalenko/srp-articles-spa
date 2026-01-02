@@ -7,29 +7,36 @@ import {
 	Typography,
 } from "@mui/material";
 import type React from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import HighlightedText from "../../features/articles/components/HighlightedText";
-import { useArticleFilter } from "../../features/articles/hooks/useArticleFilter";
-import { useArticles } from "../../features/articles/hooks/useArticles";
-import type { Article } from "../../features/articles/types";
+import { useArticlesStore } from "../../features/articles/store/useArticlesStore";
 import { truncateText } from "../../features/articles/utils/filterArticles";
 
 import "./HomePage.scss";
 
 const HomePage: React.FC = () => {
-	const { articles, isLoading, error } = useArticles();
 	const navigate = useNavigate();
-	const { query, setQuery, filteredArticles, keywords } =
-		useArticleFilter(articles);
 
-	const handleOpenArticle = (article: Article) => {
-		navigate(`/articles/${article.id}`, { state: { article } });
-	};
+	const isLoading = useArticlesStore((s) => s.isLoading);
+	const error = useArticlesStore((s) => s.error);
 
-	const handleQueryChange = (
-		event: React.ChangeEvent<HTMLInputElement>,
-	): void => {
-		setQuery(event.target.value);
+	const filter = useArticlesStore((s) => s.filter);
+	const setFilter = useArticlesStore((s) => s.setFilter);
+
+	const filtered = useArticlesStore((s) => s.filtered);
+	const keywords = useArticlesStore((s) => s.keywords);
+
+	const loadArticles = useArticlesStore((s) => s.loadArticles);
+	const selectArticle = useArticlesStore((s) => s.selectArticle);
+
+	useEffect(() => {
+		void loadArticles();
+	}, [loadArticles]);
+
+	const handleOpenArticle = (id: number) => {
+		selectArticle(id);
+		navigate(`/articles/${id}`);
 	};
 
 	return (
@@ -43,8 +50,8 @@ const HomePage: React.FC = () => {
 					label="Filter by keywords"
 					variant="outlined"
 					fullWidth
-					value={query}
-					onChange={handleQueryChange}
+					value={filter}
+					onChange={(e) => setFilter(e.target.value)}
 					placeholder="Type keywords, e.g. space radar mission"
 					size="small"
 				/>
@@ -62,14 +69,14 @@ const HomePage: React.FC = () => {
 				</Alert>
 			)}
 
-			{!isLoading && !error && filteredArticles.length > 0 && (
+			{!isLoading && !error && filtered.length > 0 && (
 				<div className="home-page__list">
-					{filteredArticles.map(({ article }) => (
+					{filtered.map(({ article }) => (
 						<Card
 							key={article.id}
 							className="home-page__card"
 							variant="outlined"
-							onClick={() => handleOpenArticle(article)}
+							onClick={() => handleOpenArticle(article.id)}
 						>
 							<CardContent>
 								<Typography variant="h6" component="h2" gutterBottom>

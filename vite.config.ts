@@ -1,7 +1,18 @@
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
-// https://vite.dev/config/
 export default defineConfig({
 	plugins: [react()],
+	build: {
+		rollupOptions: {
+			output: {
+				manualChunks: {
+					react: ["react", "react-dom"],
+					router: ["react-router-dom"],
+					mui: ["@mui/material", "@emotion/react", "@emotion/styled"],
+					zod: ["zod"],
+				},
+			},
+		},
+	},
 });
