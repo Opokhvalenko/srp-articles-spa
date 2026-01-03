@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import "./styles/globals.scss";
 import { ErrorBoundary } from "./components/error/ErrorBoundary";
+import ScrollToTop from "./components/routing/ScrollToTop";
 
 const theme = createTheme({});
 
@@ -13,6 +14,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
 			<BrowserRouter>
+				<ScrollToTop />
 				<ErrorBoundary>
 					<App />
 				</ErrorBoundary>

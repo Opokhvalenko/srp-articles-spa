@@ -34,7 +34,7 @@ export interface ArticlesState {
 	selectedArticleLoading: boolean;
 	selectedArticleError: string | null;
 
-	// internal(avoid dev double-fetch)
+	// internal (avoid dev double-fetch)
 	hasLoaded: boolean;
 
 	// actions

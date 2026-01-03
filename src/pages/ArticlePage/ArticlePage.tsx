@@ -6,13 +6,12 @@ import {
 	Container,
 	Typography,
 } from "@mui/material";
-import type React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelectedArticle } from "../../features/articles/hooks/useSelectedArticle";
 
 import "./ArticlePage.scss";
 
-const ArticlePage: React.FC = () => {
+export default function ArticlePage() {
 	const { id } = useParams<{ id: string }>();
 	const navigate = useNavigate();
 
@@ -22,6 +21,12 @@ const ArticlePage: React.FC = () => {
 	);
 
 	const handleBack = () => {
+		// If user opened the page directly (no meaningful back history), go to Home.
+		if (window.history.length <= 1) {
+			navigate("/", { replace: true });
+			return;
+		}
+
 		navigate(-1);
 	};
 
@@ -69,6 +74,4 @@ const ArticlePage: React.FC = () => {
 			</Typography>
 		</Container>
 	);
-};
-
-export default ArticlePage;
+}
