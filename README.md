@@ -4,6 +4,11 @@ A Single Page Application built with **React + TypeScript**, designed around the
 
 The app fetches articles from an open API, displays them as cards, supports keyword-based filtering with relevance ranking, and highlights matched keywords.
 
+- **Repository:** [srp-articles-spa][repo]
+- **Live demo (Netlify):** [Open app][demo]
+
+[repo]: https://github.com/Opokhvalenko/srp-articles-spa
+[demo]: https://69590b1cc793d8def8a09b2c--soft-snickerdoodle-fd69c8.netlify.app/
 ---
 
 ## Requirements Coverage
