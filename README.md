@@ -1,63 +1,80 @@
 # SRP Articles SPA
 
-Single Page Application на **React + TypeScript**, побудований за принципом **Single Responsibility Principle**.
+A Single Page Application built with **React + TypeScript**, designed around the **Single Responsibility Principle (SRP)**.
 
-## Вимоги з ТЗ, які реалізовані
+The app fetches articles from an open API, displays them as cards, supports keyword-based filtering with relevance ranking, and highlights matched keywords.
 
-### Home
-- Завантаження **100** статей з відкритого API (Spaceflight News API v4)
-- Список карток з:
+---
+
+## Requirements Coverage
+
+### Home page
+- Loads **100 articles** from an open API (**Spaceflight News API v4**)
+- Renders cards with:
   - **title**
-  - **truncated description** (до 100 символів)
-- Клік по картці відкриває **Article page**
+  - **description truncated to 100 characters**
+- Clicking a card navigates to an **Article page**
 
 ### Article page
-- Відображає **title** та **full description** обраної статті
+- Displays **title** and **full description** for the selected article
+- Includes a safe **Back** behavior (fallback to Home when history is not available)
 
-### Filter
-- Поле вводу для **кількох ключових слів**
-- Показує статті, де хоча б **один keyword** є в `title` або `description`
-- **Пріоритет title над description** при сортуванні результатів
-- **Підсвітка збігів** (жовтим) у `title` та `description`
+### Filtering
+- Input supports **multiple keywords** (space-separated)
+- Shows articles where **at least one** keyword matches in:
+  - `title` (higher priority)
+  - `description`
+- Results are **ranked** with strict priority: `title` matches > `description` matches
+- Matched keywords are **highlighted in yellow** in both title and description
 
-## Технічні вимоги
+---
 
-- **TypeScript**
-- **SCSS (SASS)**
+## Tech Stack
+- **React** + **TypeScript**
+- **SCSS (SASS)** as CSS preprocessor
 - **Material UI**
-- Приклад **custom hook** (`useSelectedArticle`)
-- Приклад **state management** (Zustand store)
+- **Zustand** (state management)
+- **Zod** (API response validation)
 
-## Архітектура
+---
 
-- **API layer**: `src/api/articlesApi.ts`
-  - універсальний `fetchJson` + `fetchAndParse`
-  - валідація відповідей через **Zod**
-- **Single source of truth**: `src/features/articles/store/useArticlesStore.ts`
-  - list state + filter state + selected article state
-  - derived state (filtered + keywords) обчислюється в одному місці
-- **Utils**: `src/features/articles/utils/filterArticles.ts`
-  - парсинг keywords, фільтрація, скоринг/сортування, truncate
-- **UI**:
-  - сторінки мінімальні (“тонкі”), логіка в store/hooks/utils
-  - `HighlightedText` відповідає тільки за підсвітку
+## Architecture (SRP-focused)
+
+- **API layer**: `src/api/articlesApi.ts`  
+  - `fetchJson` + `fetchAndParse` helpers  
+  - runtime validation via **Zod**
+  - mapping from API model → domain model
+
+- **State (single source of truth)**: `src/features/articles/store/useArticlesStore.ts`  
+  - list state + filter state + selected article state  
+  - persistence via `persist` middleware (**sessionStorage**) for `filter` and selected article
+
+- **Derived state**: `src/features/articles/store/articlesSelectors.ts`  
+  - `selectKeywords`
+  - `selectFilteredArticles`  
+  - memoized selectors to avoid unnecessary recalculation
+
+- **Domain utilities**: `src/features/articles/utils/filterArticles.ts`  
+  - keyword parsing, filtering, scoring/sorting, truncation
+
+- **UI components**
+  - `HighlightedText` (UI-only keyword highlighting)
+  - pages are intentionally “thin”: mostly rendering + wiring to store/hooks
+
 - **Routing**: `src/router/index.tsx`
-  - `/` і `/articles/:id`
-  - `React.lazy` + `Suspense` (code-splitting)
+  - `/` and `/articles/:id`
+  - code-splitting via `React.lazy` + `Suspense`
+  - unknown routes redirect to `/`
 
-## Запуск локально
+- **Stability**
+  - global `ErrorBoundary` to handle unexpected UI runtime errors gracefully
+  - `ScrollToTop` on route change
+
+---
+
+## Getting Started
+
+Install dependencies:
 
 ```bash
 npm ci
-npm run dev
-```
-
-## Перевірка якості
-
-```bash
-npm run verify
-```
-## Additional improvements
-- **Persistence (sessionStorage)**: filter and selected article state are persisted via Zustand `persist` middleware.
-- **ErrorBoundary**: global error boundary to gracefully handle unexpected runtime UI errors.
-- **404 fallback**: unknown routes redirect to `/`.
