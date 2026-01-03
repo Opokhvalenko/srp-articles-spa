@@ -13,7 +13,7 @@ interface State {
 export class ErrorBoundary extends React.Component<Props, State> {
 	state: State = { hasError: false };
 
-	static getDeliveredStateFromError(error: Error): State {
+	static getDerivedStateFromError(error: Error): State {
 		return { hasError: true, error };
 	}
 
@@ -21,7 +21,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
 		console.error("Unhandled UI err:", error, info);
 	}
 
-	private handledReLoad = () => {
+	private handleReLoad = () => {
 		window.location.reload();
 	};
 
@@ -41,7 +41,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
 				</Alert>
 
 				<Stack direction="row" spacing={2}>
-					<Button variant="contained" onClick={this.handledReLoad}>
+					<Button variant="contained" onClick={this.handleReLoad}>
 						Reload
 					</Button>
 					<Button variant="outlined" href="/">

@@ -12,7 +12,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 			<AppBar position="static">
 				<Toolbar>
 					<Typography variant="h6" component="div">
-						SPR Articles SPA
+						SRP Articles SPA
 					</Typography>
 				</Toolbar>
 			</AppBar>

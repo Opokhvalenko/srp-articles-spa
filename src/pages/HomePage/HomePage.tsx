@@ -1,6 +1,7 @@
 import {
 	Alert,
 	Card,
+	CardActionArea,
 	CardContent,
 	CircularProgress,
 	TextField,
@@ -86,19 +87,20 @@ const HomePage: FC = () => {
 							key={article.id}
 							className="home-page__card"
 							variant="outlined"
-							onClick={() => handleOpenArticle(article.id)}
 						>
-							<CardContent>
-								<Typography variant="h6" component="h2" gutterBottom>
-									<HighlightedText text={article.title} keywords={keywords} />
-								</Typography>
-								<Typography variant="body2" color="text.secondary">
-									<HighlightedText
-										text={truncateText(article.description, 100)}
-										keywords={keywords}
-									/>
-								</Typography>
-							</CardContent>
+							<CardActionArea onClick={() => handleOpenArticle(article.id)}>
+								<CardContent>
+									<Typography variant="h6" component="h2" gutterBottom>
+										<HighlightedText text={article.title} keywords={keywords} />
+									</Typography>
+									<Typography variant="body2" color="text.secondary">
+										<HighlightedText
+											text={truncateText(article.description, 100)}
+											keywords={keywords}
+										/>
+									</Typography>
+								</CardContent>
+							</CardActionArea>
 						</Card>
 					))}
 				</div>

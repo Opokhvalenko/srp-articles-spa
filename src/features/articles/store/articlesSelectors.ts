@@ -22,16 +22,16 @@ export const selectKeywords = (s: ArticlesState): string[] => {
 
 // filtered articles selector (memoized)
 let lastArticlesRef: Article[] | null = null;
-let lastFiltereForList = "";
+let lastFilterForList = "";
 let lastFiltered: FilteredArticle[] = [];
 
 export const selectFilteredArticles = (s: ArticlesState): FilteredArticle[] => {
-	if (s.articles === lastArticlesRef && s.filter === lastFiltereForList) {
+	if (s.articles === lastArticlesRef && s.filter === lastFilterForList) {
 		return lastFiltered;
 	}
 
 	lastArticlesRef = s.articles;
-	lastFiltereForList = s.filter;
+	lastFilterForList = s.filter;
 	lastFiltered = filterAndSortArticles(s.articles, s.filter);
 
 	return lastFiltered;

@@ -42,7 +42,7 @@ const fetchJson = async (url: string): Promise<unknown> => {
 		});
 
 		throw new Error(
-			`Unexpected response from API (expected JSON, got ${contentType || "unknow"}).`,
+			`Unexpected response from API (expected JSON, got ${contentType || "unknown"}).`,
 		);
 	}
 
