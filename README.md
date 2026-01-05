@@ -9,6 +9,7 @@ The app fetches articles from an open API, displays them as cards, supports keyw
 
 [repo]: https://github.com/Opokhvalenko/srp-articles-spa
 [demo]: https://69590b1cc793d8def8a09b2c--soft-snickerdoodle-fd69c8.netlify.app/
+
 ---
 
 ## Requirements Coverage
@@ -17,7 +18,7 @@ The app fetches articles from an open API, displays them as cards, supports keyw
 - Loads **100 articles** from an open API (**Spaceflight News API v4**)
 - Renders cards with:
   - **title**
-  - **description truncated to 100 characters**
+  - **description preview (≤ 100 chars, optionally centered around the first match)**
 - Clicking a card navigates to an **Article page**
 
 ### Article page
@@ -32,6 +33,11 @@ The app fetches articles from an open API, displays them as cards, supports keyw
 - Results are **ranked** with strict priority: `title` matches > `description` matches
 - Matched keywords are **highlighted in yellow** in both title and description
 
+### Matching rules
+- The query is tokenized into unique keywords (letters/digits only, case-insensitive).
+- Matching is performed at a **word start boundary** (unicode-aware).  
+  Example: `liv` matches **live**, but not `de**liv**ers`.
+
 ---
 
 ## Tech Stack
@@ -40,6 +46,9 @@ The app fetches articles from an open API, displays them as cards, supports keyw
 - **Material UI**
 - **Zustand** (state management)
 - **Zod** (API response validation)
+- **ESLint + Biome + Stylelint** (code quality)
+- **Husky + lint-staged** (pre-commit checks)
+- **GitHub Actions CI** (build + quality checks)
 
 ---
 
@@ -52,7 +61,7 @@ The app fetches articles from an open API, displays them as cards, supports keyw
 
 - **State (single source of truth)**: `src/features/articles/store/useArticlesStore.ts`  
   - list state + filter state + selected article state  
-  - persistence via `persist` middleware (**sessionStorage**) for `filter` and selected article
+  - persistence via `persist` middleware (**sessionStorage**) for `filter` 
 
 - **Derived state**: `src/features/articles/store/articlesSelectors.ts`  
   - `selectKeywords`
@@ -64,7 +73,7 @@ The app fetches articles from an open API, displays them as cards, supports keyw
 
 - **UI components**
   - `HighlightedText` (UI-only keyword highlighting)
-  - pages are intentionally “thin”: mostly rendering + wiring to store/hooks
+ - pages are intentionally kept thin: mostly rendering + wiring to store/hooks
 
 - **Routing**: `src/router/index.tsx`
   - `/` and `/articles/:id`
@@ -83,3 +92,33 @@ Install dependencies:
 
 ```bash
 npm ci
+```
+
+## Scripts
+
+### Development
+```bash
+npm run dev
+npm run preview
+```
+### Build
+
+```bash
+npm run build
+```
+
+### Lint & format
+```bash
+npm run lint:eslint
+npm run lint:biome
+npm run lint:styles
+npm run verify
+```
+
+### Auto-fix
+```bash
+npm run fix
+npm run format:fix
+npm run fix:styles
+npm run fix:all
+```

@@ -1,26 +1,186 @@
+@use "../../styles/variables" as v;
+@use "../../styles/mixins" as m;
+
 .article-page {
-    padding-top: 24px;
-    padding-bottom: 24px;
+  background: v.$color-bg-article;
+  padding: v.$article-pad-top 0 v.$article-pad-bottom;
 
-    &__header {
-        display: flex;
-        justify-content: flex-start;
-        margin-bottom: 16px;
-    }
+  /* If somewhere old styles added min-height/flex, this prevents "sticky footer" behavior */
+  min-height: auto;
 
-    &__description {
-        margin-top: 16px;
-        line-height: 1.6;
-    }
+  /* layout vars */
+  --gutter: #{v.$article-gutter-desktop};
+  --paper: #{v.$article-paper-width};
+  --pad-top: #{v.$article-paper-pad-top};
+  --pad-x: #{v.$article-paper-pad-x};
+  --pad-bottom: #{v.$article-paper-pad-bottom};
+  --hero-h: #{v.$article-hero-height};
+  --overlap: #{v.$article-overlap};
 
-    &__loader {
-        display: flex;
-        justify-content: center;
-        padding: 32px 0;
-    }
-
-    &__alert {
-        margin-bottom: 16px;
-    }
+  @media (width >= 1440px) {
+    --gutter: clamp(#{v.$article-gutter-desktop}, 4vw, 140px);
+    --pad-x: clamp(#{v.$article-paper-pad-x}, 4vw, 120px);
+    --paper: clamp(#{v.$article-paper-width}, 78vw, 1680px);
+  }
 }
 
+/* Make sure container does NOT push footer to bottom */
+.article-page__container {
+  display: block;
+  min-height: auto;
+}
+
+/* Hero */
+.article-page__hero {
+  height: var(--hero-h);
+  position: relative;
+  overflow: hidden;
+  background: v.$color-hero-placeholder;
+}
+
+.article-page__hero-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.article-page__hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: v.$overlay-hero;
+}
+
+/* Paper */
+.article-page__paper {
+  width: min(calc(100% - (var(--gutter) * 2)), var(--paper));
+  margin: 0 auto;
+  margin-top: 0; /* default: no overlap */
+  padding: var(--pad-top) var(--pad-x) var(--pad-bottom);
+  background: v.$color-surface;
+  border-radius: v.$radius-paper;
+  border: 1px solid v.$color-border-card;
+  box-shadow: v.$shadow-paper;
+  position: relative;
+  z-index: 1;
+}
+
+.article-page__paper--overlap {
+  margin-top: calc(-1 * var(--overlap));
+}
+
+/* Typography */
+.article-page__title {
+  margin: 0;
+  text-align: center;
+  font-family: v.$font-family-base;
+  font-size: v.$article-title-size;
+  font-weight: 400;
+  line-height: 1.15;
+  color: v.$color-heading;
+  overflow-wrap: anywhere;
+}
+
+.article-page__meta {
+  margin: v.$article-meta-margin-top 0 0;
+  text-align: center;
+  font-family: v.$font-family-base;
+  font-size: v.$article-meta-size;
+  line-height: v.$article-meta-line-height;
+  color: v.$color-text-meta;
+}
+
+.article-page__description {
+  margin: v.$article-desc-margin-top 0 0;
+  font-family: v.$font-family-base;
+  font-size: v.$article-desc-size;
+  line-height: v.$article-desc-line-height;
+  color: v.$color-text-strong;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+/* Footer */
+.article-page__footer {
+  width: min(calc(100% - (var(--gutter) * 2)), var(--paper));
+  margin: v.$article-footer-margin-top auto 0;
+  padding-inline: var(--pad-x);
+}
+
+.article-page__back {
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
+  min-width: 0;
+  font-family: v.$font-family-base;
+  font-size: v.$article-back-font-size;
+  line-height: v.$article-back-line-height;
+  font-weight: v.$article-back-font-weight;
+  color: v.$color-heading;
+  background: transparent;
+  text-transform: none;
+
+  &::before {
+    content: "←";
+    margin-right: v.$article-back-arrow-gap;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      text-decoration: none;
+      background: rgb(54 54 54 / 6%);
+      box-shadow: 0 0 0 6px rgb(54 54 54 / 12%);
+    }
+  }
+
+  &:focus-visible {
+    outline: v.$article-back-focus-outline;
+    outline-offset: v.$article-back-focus-outline-offset;
+    border-radius: v.$article-back-focus-radius;
+  }
+}
+
+/* Loader */
+.article-page__loader {
+  display: flex;
+  justify-content: center;
+  padding: v.$article-loader-pad-y 0;
+}
+
+/* <1280px: smaller outer gutters */
+@include m.max(v.$article-gutter-break) {
+  .article-page {
+    --gutter: #{v.$article-gutter-compact};
+  }
+}
+
+/* Tablet */
+@include m.max(v.$bp-tablet) {
+  .article-page {
+    --pad-top: #{v.$article-paper-pad-top-tablet};
+    --pad-x: #{v.$article-paper-pad-x-tablet};
+    --pad-bottom: #{v.$article-paper-pad-bottom-tablet};
+  }
+}
+
+/* Mobile */
+@include m.max(v.$bp-mobile) {
+  .article-page {
+    padding: 0 0 v.$space-8;
+
+    --hero-h: #{v.$article-hero-height-mobile};
+    --overlap: #{v.$article-overlap-mobile};
+    --pad-top: #{v.$article-paper-pad-top-mobile};
+    --pad-x: #{v.$article-paper-pad-x-mobile};
+    --pad-bottom: #{v.$article-paper-pad-bottom-mobile};
+    --gutter: #{v.$space-4};
+  }
+
+  .article-page__description {
+    font-size: v.$article-desc-size-mobile;
+  }
+
+  .article-page__footer {
+    margin-top: v.$article-footer-margin-top-mobile;
+  }
+}

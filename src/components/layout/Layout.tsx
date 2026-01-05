@@ -1,27 +1,17 @@
-import { AppBar, Container, Toolbar, Typography } from "@mui/material";
-import type React from "react";
+import { Outlet, useLocation } from "react-router-dom";
 import "./Layout.scss";
 
-interface LayoutProps {
-	children: React.ReactNode;
-}
+export default function Layout() {
+	const { pathname } = useLocation();
+	const isArticlePage = pathname.startsWith("/articles/");
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
 	return (
-		<div className="layout">
-			<AppBar position="static">
-				<Toolbar>
-					<Typography variant="h6" component="div">
-						SRP Articles SPA
-					</Typography>
-				</Toolbar>
-			</AppBar>
-
-			<main className="layout__main">
-				<Container maxWidth="md">{children}</Container>
-			</main>
+		<div className="app">
+			<div
+				className={`app__container${isArticlePage ? " app__container--full" : ""}`}
+			>
+				<Outlet />
+			</div>
 		</div>
 	);
-};
-
-export default Layout;
+}

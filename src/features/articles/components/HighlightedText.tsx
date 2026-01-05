@@ -1,60 +1,60 @@
 import type React from "react";
+import { useMemo } from "react";
+
+import { buildKeywordsRegex } from "../utils/keywordRegex";
 
 interface HighlightedTextProps {
 	text: string;
 	keywords: string[];
 }
 
-const escapeRegExp = (value: string): string => {
-	return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-};
-
 const HighlightedText: React.FC<HighlightedTextProps> = ({
 	text,
 	keywords,
 }) => {
-	if (keywords.length === 0) {
+	const memoizedRegex = useMemo(
+		() => buildKeywordsRegex(keywords, "gi"),
+		[keywords],
+	);
+
+	// Clone RegExp to avoid "g" flag state leaking via lastIndex.
+	const safeRegex = memoizedRegex
+		? new RegExp(memoizedRegex.source, memoizedRegex.flags)
+		: null;
+
+	if (!safeRegex || text.length === 0) {
 		return <>{text}</>;
 	}
-	const escaped = keywords.map(escapeRegExp).join("|");
 
-	if (!escaped) {
-		return <>{text}</>;
-	}
+	const nodes: React.ReactNode[] = [];
 
-	const regex = new RegExp(`(${escaped})`, "gi");
-	const parts: React.ReactNode[] = [];
+	let lastSliceEndIndex = 0;
 
-	let lastIndex = 0;
-	let match: RegExpExecArray | null = regex.exec(text);
+	for (const match of text.matchAll(safeRegex)) {
+		const matchStartIndex = match.index ?? 0;
+		const matchedText = match[0] ?? "";
 
-	while (match !== null) {
-		const matchIndex = match.index;
-
-		if (matchIndex > lastIndex) {
-			parts.push(text.slice(lastIndex, matchIndex));
+		if (matchStartIndex > lastSliceEndIndex) {
+			nodes.push(text.slice(lastSliceEndIndex, matchStartIndex));
 		}
 
-		const matchedText = text.slice(matchIndex, matchIndex + match[0].length);
-
-		parts.push(
+		nodes.push(
 			<mark
-				key={`${matchIndex} - ${matchedText}`}
-				style={{ backgroundColor: "yellow", padding: 0 }}
+				key={`${matchStartIndex}-${matchedText}`}
+				className="highlighted-text__mark"
 			>
 				{matchedText}
 			</mark>,
 		);
 
-		lastIndex = matchIndex + match[0].length;
-		match = regex.exec(text);
+		lastSliceEndIndex = matchStartIndex + matchedText.length;
 	}
 
-	if (lastIndex < text.length) {
-		parts.push(text.slice(lastIndex));
+	if (lastSliceEndIndex < text.length) {
+		nodes.push(text.slice(lastSliceEndIndex));
 	}
 
-	return <>{parts}</>;
+	return <>{nodes}</>;
 };
 
 export default HighlightedText;

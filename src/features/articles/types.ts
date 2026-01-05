@@ -6,6 +6,9 @@ export const ArticleApiSchema = z.object({
 	id: z.number(),
 	title: z.string(),
 	summary: z.string(),
+
+	image_url: z.string().nullable().optional(),
+	published_at: z.string().optional(),
 });
 
 export const ArticlesApiResponseSchema = z.object({
@@ -20,6 +23,10 @@ export const ArticleSchema = z.object({
 	id: z.number(),
 	title: z.string(),
 	description: z.string(),
+
+	imageUrl: z.string().default(""),
+	publishedAt: z.string().default(""),
+	publishedAtLabel: z.string().default(""),
 });
 
 export type Article = z.infer<typeof ArticleSchema>;

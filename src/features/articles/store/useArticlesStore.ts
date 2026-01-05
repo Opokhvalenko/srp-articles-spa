@@ -3,7 +3,7 @@ import { createJSONStorage, persist } from "zustand/middleware";
 import { fetchArticles, getArticleById } from "../../../api/articlesApi";
 import type { Article } from "../types";
 
-const sessionStorageFallback: Storage = {
+const emptyStorage: Storage = {
 	getItem: () => null,
 	setItem: () => undefined,
 	removeItem: () => undefined,
@@ -15,9 +15,7 @@ const sessionStorageFallback: Storage = {
 };
 
 const sessionStorageProvider = (): Storage =>
-	typeof window === "undefined"
-		? sessionStorageFallback
-		: window.sessionStorage;
+	typeof window === "undefined" ? emptyStorage : window.sessionStorage;
 
 export interface ArticlesState {
 	// data
@@ -102,6 +100,18 @@ export const useArticlesStore = create<ArticlesState>()(
 			},
 
 			loadArticleById: async (id) => {
+				const { selectedArticleId, selectedArticle, selectedArticleLoading } =
+					get();
+
+				// guard: avoid StrictMode double-fetch + repeated calls
+				if (selectedArticleLoading) {
+					return;
+				}
+
+				if (selectedArticleId === id && selectedArticle) {
+					return;
+				}
+
 				try {
 					set({
 						selectedArticleLoading: true,
@@ -112,10 +122,11 @@ export const useArticlesStore = create<ArticlesState>()(
 					const article = await getArticleById(String(id));
 
 					// protect from race conditions
-					const { selectedArticleId } = get();
-					if (selectedArticleId !== id) {
+					const { selectedArticleId: currentId } = get();
+					if (currentId !== id) {
 						return;
 					}
+
 					set({
 						selectedArticle: article,
 						selectedArticleLoading: false,
@@ -138,11 +149,8 @@ export const useArticlesStore = create<ArticlesState>()(
 			name: "srp-articles-spa",
 			storage: createJSONStorage(sessionStorageProvider),
 			version: 1,
-			partialize: (s) => ({
-				filter: s.filter,
-				selectedArticleId: s.selectedArticleId,
-				selectedArticle: s.selectedArticle,
-			}),
+			// persist only what is actually useful between reloads
+			partialize: (state) => ({ filter: state.filter }),
 		},
 	),
 );

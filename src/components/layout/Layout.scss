@@ -1,5 +1,18 @@
-.layout {
-  &__main {
-    padding: 2rem 0;
-  }
+@use "../../styles/variables" as v;
+
+.app {
+  min-height: 100vh;
+  background: v.$color-bg;
+}
+
+.app__container {
+  position: relative;
+  max-width: v.$app-container-max;
+  margin: 0 auto;
+  padding: v.$app-container-pad-top v.$app-container-pad-x v.$app-container-pad-bottom;
+}
+
+.app__container--full {
+  max-width: none;
+  padding: 0;
 }

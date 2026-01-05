@@ -8,20 +8,20 @@ const ArticlePage = lazy(() => import("../pages/ArticlePage/ArticlePage"));
 
 export default function AppRouter() {
 	return (
-		<Layout>
-			<Suspense
-				fallback={
-					<Box sx={{ py: 3, display: "flex", justifyContent: "center" }}>
-						<CircularProgress />
-					</Box>
-				}
-			>
-				<Routes>
+		<Suspense
+			fallback={
+				<Box sx={{ py: 3, display: "flex", justifyContent: "center" }}>
+					<CircularProgress />
+				</Box>
+			}
+		>
+			<Routes>
+				<Route element={<Layout />}>
 					<Route path="/" element={<HomePage />} />
 					<Route path="/articles/:id" element={<ArticlePage />} />
-					<Route path="*" element={<Navigate to="/" replace />} />
-				</Routes>
-			</Suspense>
-		</Layout>
+				</Route>
+				<Route path="*" element={<Navigate to="/" replace />} />
+			</Routes>
+		</Suspense>
 	);
 }
