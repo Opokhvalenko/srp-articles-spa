@@ -1,3 +1,5 @@
+@use "./variables" as v;
+
 *,
 *::before,
 *::after {
@@ -6,16 +8,26 @@
 
 body {
   margin: 0;
-  font-family:
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    sans-serif;
-  background-color: #f5f5f5;
+  font-family: v.$font-family-base;
+  color: v.$color-body;
+  background: v.$color-bg;
 }
 
 a {
   color: inherit;
   text-decoration: none;
+}
+
+.highlighted-text__mark {
+  background-color: v.$color-highlight-bg;
+  padding: 0 4px;
+  border-radius: 4px;
+  color: inherit;
+  box-decoration-break: clone;
+}
+
+h1,
+h2,
+h3 {
+  letter-spacing: 0.2px;
 }

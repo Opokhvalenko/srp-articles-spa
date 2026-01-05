@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
 
 # Run lint-staged on staged files before each commit
-npx lint-staged
+npx --no-install lint-staged

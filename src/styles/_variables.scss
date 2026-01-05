@@ -1,0 +1,140 @@
+/* Colors */
+$color-surface: #fff;
+$color-bg: #f5f6f8;
+$color-text: #2b2b2b;
+$color-text-muted: #5a5a5a;
+$color-text-subtle: #6b6b6b;
+$color-text-meta: #8a8a8a;
+$color-divider: #e6e6e6;
+$color-highlight-bg: #fff59d;
+
+/* Semantic colors  */
+$color-heading: #363636;
+$color-border-card: #eaeaea;
+$color-bg-article: #f7f8fa;
+$color-hero-placeholder: #c4c4c4;
+$color-text-strong: #000;
+$color-body: $color-text;
+$color-description: rgb(0 0 0 / 78%);
+
+/* Shadows */
+$shadow-input: 0 6px 16px rgb(0 0 0 / 6%);
+$shadow-card: 0 10px 26px rgb(0 0 0 / 8%);
+$shadow-card-hover: 0 14px 32px rgb(0 0 0 / 12%);
+
+/* Paper (Figma) */
+$shadow-paper: 0 8px 24px rgb(0 0 0 / 5%);
+
+/* Radius */
+$radius-sm: 6px;
+$radius-md: 10px;
+$radius-lg: 12px;
+
+/* Paper radius (Figma) */
+$radius-paper: 5px;
+
+/* Spacing */
+$space-1: 8px;
+$space-2: 10px;
+$space-3: 14px;
+$space-4: 16px;
+$space-5: 18px;
+$space-6: 22px;
+$space-7: 28px;
+$space-8: 32px;
+
+/* Typography */
+$font-size-label: 14px;
+$font-size-results: 14px;
+$font-size-meta: 12px;
+
+/* Base font */
+$font-family-base: "Montserrat", system-ui, -apple-system, "Segoe UI", roboto, arial,
+  sans-serif;
+
+/* Layout */
+$search-max-width: 560px;
+$app-container-max: 1120px;
+$app-container-pad-x: 24px;
+$app-container-pad-top: 40px;
+$app-container-pad-bottom: 80px;
+
+/* Breakpoints */
+$bp-tablet: 1024px;
+$bp-mobile: 640px;
+
+/* Overlays */
+$overlay-hero: linear-gradient(
+  to bottom,
+  rgb(0 0 0 / 6%),
+  rgb(0 0 0 / 18%)
+);
+
+
+ /*   ARTICLE PAGE — layout only (Figma baseline 1440)
+    geometry/constants */
+  
+/* Page */
+$article-pad-top: 0px;
+$article-pad-bottom: $app-container-pad-bottom;
+
+/* Gutters */
+$article-gutter-desktop: 75px;
+$article-gutter-compact: 24px;
+$article-gutter-break: 1279px;
+
+/* Hero */
+$article-hero-height: 245px;
+$article-hero-height-mobile: 180px;
+
+/* Paper width */
+$article-paper-width: 1290px;
+
+/* Paper paddings */
+$article-paper-pad-top: 32px;
+$article-paper-pad-x: 75px;
+$article-paper-pad-bottom: 40px;
+$article-paper-pad-top-tablet: 28px;
+$article-paper-pad-x-tablet: 48px;
+$article-paper-pad-bottom-tablet: 36px;
+$article-paper-pad-top-mobile: 24px;
+$article-paper-pad-x-mobile: 16px;
+$article-paper-pad-bottom-mobile: 28px;
+
+/* Overlap */
+$article-overlap: 95px;
+$article-overlap-mobile: 84px;
+
+/* Article typography (sizes only) */
+$article-title-size: 24px;
+$article-meta-size: 14px;
+$article-desc-size: 18px;
+$article-desc-size-mobile: 16px;
+$article-meta-margin-top: 12px;
+$article-desc-margin-top: 18px;
+$article-meta-line-height: 1.5;
+$article-desc-line-height: 1.5;
+
+/* Footer / back */
+$article-footer-margin-top: 16px;
+$article-footer-margin-top-mobile: 18px;
+$article-back-font-size: 18px;
+$article-back-line-height: 24px;
+$article-back-font-weight: 600;
+$article-back-arrow-gap: 10px;
+$article-back-focus-outline: 2px solid rgb(54 54 54 / 35%);
+$article-back-focus-outline-offset: 4px;
+$article-back-focus-radius: 4px;
+
+/* Loader */
+$article-loader-pad-y: 56px;
+
+/* Home page — Article card */
+
+$article-card-media-height: 160px;
+$article-card-title-size: 18px;
+$article-card-title-line-height: 1.25;
+$article-card-desc-size: 14px;
+$article-card-date-icon-size: 14px;
+$article-card-focus-outline: 2px solid rgb(54 54 54 / 20%);
+$article-card-focus-outline-offset: 3px;

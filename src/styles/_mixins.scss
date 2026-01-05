@@ -1,0 +1,37 @@
+@use "./variables" as v;
+
+/* Media helpers */
+@mixin max($bp) {
+  @media (width <= $bp) {
+    @content;
+  }
+}
+
+/* Text clamp */
+@mixin line-clamp($lines) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* “Surface” (white card / input) */
+@mixin surface($radius: v.$radius-md, $shadow: v.$shadow-card) {
+  background: v.$color-surface;
+  border-radius: $radius;
+  box-shadow: $shadow;
+}
+
+/* Simple row align */
+@mixin row-center($gap: v.$space-1) {
+  display: flex;
+  align-items: center;
+  gap: $gap;
+}
+
+/* Grid */
+@mixin grid($cols, $gap: v.$space-7) {
+  display: grid;
+  grid-template-columns: repeat($cols, minmax(0, 1fr));
+  gap: $gap;
+}

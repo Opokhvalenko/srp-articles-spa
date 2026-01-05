@@ -1,31 +1,32 @@
 import { useEffect, useMemo } from "react";
+
 import { useArticlesStore } from "../store/useArticlesStore";
 import type { SelectedArticleResult } from "../types";
 
 export const useSelectedArticle = (
-	id: number | null,
+	articleId: number | null,
 ): SelectedArticleResult => {
-	const article = useArticlesStore((s) => s.selectedArticle);
+	const selectedArticle = useArticlesStore((s) => s.selectedArticle);
 	const isLoading = useArticlesStore((s) => s.selectedArticleLoading);
 	const error = useArticlesStore((s) => s.selectedArticleError);
 	const loadArticleById = useArticlesStore((s) => s.loadArticleById);
 
 	useEffect(() => {
-		if (!id) {
+		if (articleId === null) {
 			return;
 		}
-		void loadArticleById(id);
-	}, [id, loadArticleById]);
+		void loadArticleById(articleId);
+	}, [articleId, loadArticleById]);
 
-	const stableArticle = useMemo(() => {
-		if (!id || !article) {
+	const article = useMemo(() => {
+		if (!articleId || !selectedArticle) {
 			return null;
 		}
-		return article.id === id ? article : null;
-	}, [article, id]);
+		return selectedArticle.id === articleId ? selectedArticle : null;
+	}, [selectedArticle, articleId]);
 
 	return {
-		article: stableArticle,
+		article: article,
 		isLoading,
 		error,
 	};

@@ -1,29 +1,94 @@
-.home-page__search {
-    margin-top: 1rem;
-    margin-bottom: 1.5rem;
-}
+@use "../../styles/variables" as v;
+@use "../../styles/mixins" as m;
 
-.home-page__loader {
+.home-page {
+  background: v.$color-surface;
+  border-radius: v.$radius-lg;
+  padding: v.$app-container-pad-top v.$article-paper-pad-x
+    v.$app-container-pad-bottom;
+
+  &__filter {
+    margin-top: 0;
+  }
+
+  &__label {
+    margin-bottom: v.$space-1;
+    font-size: v.$font-size-label;
+    font-weight: 600;
+    color: v.$color-text;
+  }
+
+  &__search {
+    width: min(v.$search-max-width, 100%);
+  }
+
+  &__search-input {
+    background: v.$color-surface;
+    box-shadow: v.$shadow-input;
+    border-radius: v.$radius-sm;
+
+    fieldset,
+    &:hover fieldset,
+    &:focus-within fieldset {
+      border-color: transparent;
+    }
+
+    input::placeholder {
+      color: v.$color-text-meta;
+      opacity: 1;
+    }
+  }
+
+  &__search-icon {
+    color: v.$color-text-muted;
+  }
+
+  &__results {
+    margin-top: v.$space-6;
+    font-size: v.$font-size-results;
+    font-weight: 600;
+    color: v.$color-text;
+  }
+
+  &__divider {
+    margin-top: v.$space-2;
+    margin-bottom: v.$space-6;
+    background: v.$color-divider;
+  }
+
+  &__loader {
     display: flex;
     justify-content: center;
-    margin-top: 2rem;
+    margin-top: v.$space-8;
+  }
+
+  &__alert {
+    margin: v.$space-4 0;
+  }
+
+  &__grid {
+    @include m.grid(3, v.$space-7);
+  }
 }
 
-.home-page__alert {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
+@include m.max(v.$bp-tablet) {
+  .home-page {
+    padding: v.$app-container-pad-top v.$article-paper-pad-x-tablet
+      v.$app-container-pad-bottom;
+
+    &__grid {
+      @include m.grid(2, v.$space-7);
+    }
+  }
 }
 
-.home-page__empty {
-    margin-top: 1.5rem;
-}
-.home-page__list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    margin-top: 0.5rem;
-}
+@include m.max(v.$bp-mobile) {
+  .home-page {
+    border-radius: 0;
+    padding: v.$space-6 v.$article-paper-pad-x-mobile v.$space-8;
 
-.home-page__card {
-    cursor: pointer;
+    &__grid {
+      @include m.grid(1, v.$space-7);
+    }
+  }
 }

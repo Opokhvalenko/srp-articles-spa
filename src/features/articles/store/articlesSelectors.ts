@@ -6,33 +6,39 @@ import {
 } from "../utils/filterArticles";
 import type { ArticlesState } from "./useArticlesStore";
 
-// keywords selector (memoized)
-let lastFilterForKeywords = "";
-let lastKeywords: string[] = [];
+// keywords selector (manual memoization)
+let cachedKeywordsQuery = "";
+let cachedKeywords: string[] = [];
 
-export const selectKeywords = (s: ArticlesState): string[] => {
-	if (s.filter === lastFilterForKeywords) {
-		return lastKeywords;
+export const selectKeywords = (state: ArticlesState): string[] => {
+	if (state.filter === cachedKeywordsQuery) {
+		return cachedKeywords;
 	}
 
-	lastFilterForKeywords = s.filter;
-	lastKeywords = parseKeywords(s.filter);
-	return lastKeywords;
+	cachedKeywordsQuery = state.filter;
+	cachedKeywords = parseKeywords(state.filter);
+
+	return cachedKeywords;
 };
 
-// filtered articles selector (memoized)
-let lastArticlesRef: Article[] | null = null;
-let lastFilterForList = "";
-let lastFiltered: FilteredArticle[] = [];
+// filtered articles selector (manual memoization)
+let cachedArticlesRef: Article[] | null = null;
+let cachedFilterQuery = "";
+let cachedFilteredArticles: FilteredArticle[] = [];
 
-export const selectFilteredArticles = (s: ArticlesState): FilteredArticle[] => {
-	if (s.articles === lastArticlesRef && s.filter === lastFilterForList) {
-		return lastFiltered;
+export const selectFilteredArticles = (
+	state: ArticlesState,
+): FilteredArticle[] => {
+	const isSameInput =
+		state.articles === cachedArticlesRef && state.filter === cachedFilterQuery;
+
+	if (isSameInput) {
+		return cachedFilteredArticles;
 	}
 
-	lastArticlesRef = s.articles;
-	lastFilterForList = s.filter;
-	lastFiltered = filterAndSortArticles(s.articles, s.filter);
+	cachedArticlesRef = state.articles;
+	cachedFilterQuery = state.filter;
+	cachedFilteredArticles = filterAndSortArticles(state.articles, state.filter);
 
-	return lastFiltered;
+	return cachedFilteredArticles;
 };

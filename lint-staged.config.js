@@ -1,3 +1,4 @@
 export default {
-	"**/*.{ts,tsx,js}": ["eslint --fix"],
+	"**/*.{ts,tsx}": ["eslint --fix", "biome check --write"],
+	"**/*.scss": ["stylelint --fix"],
 };
